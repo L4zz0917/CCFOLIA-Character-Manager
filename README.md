@@ -25,7 +25,9 @@ CCFOLIA Character Manager は、ココフォリア用のローカルキャラク
 
 ## ダウンロード
 
-GitHubの **Releases** から最新版の配布ZIPをダウンロードしてください。
+最新版は以下からダウンロードできます。
+
+[Latest Release](https://github.com/L4zz0917/CCFOLIA-Character-Manager/releases/latest)
 
 配布ファイル名の例:
 
