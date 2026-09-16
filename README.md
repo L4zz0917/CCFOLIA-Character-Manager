@@ -40,7 +40,7 @@ GitHubが自動生成する `Source code (zip)` / `Source code (tar.gz)` は、C
 
 1. 配布ZIPを任意の書き込み可能なフォルダへ展開します。
 2. `CCFOLIACharacterManager.exe` を起動します。
-3. Braveで `brave://extensions/` を開きます。
+3. Braveで `brave://extensions/` を開きます。Chromeの場合は`chrome://extensions/`を開きます。
 4. 「デベロッパーモード」を有効にします。
 5. 「パッケージ化されていない拡張機能を読み込む」を選択します。
 6. 配布物内の `browser_extension` フォルダを指定します。
