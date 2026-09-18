@@ -1,92 +1,124 @@
-# CCFOLIA Character Manager
+# CCFOLIA Manager
 
-**Version 1.0.0**  
+**Version 2.0.0**  
 **Author: L4zz**
 
-CCFOLIA Character Manager は、ココフォリア用のローカルキャラクター管理ツールです。
+CCFOLIA Manager は、ココフォリアで使用するキャラクター・画像・BGMをローカルでまとめて管理し、Windowsアプリとブラウザ拡張機能からCCFOLIAへ連携するための非公式ツールです。
 
 > [!IMPORTANT]
-> 本ソフトウェアは非公式ツールです。ココフォリア公式およびその運営とは関係ありません。
+> 本ソフトウェアは非公式の第三者ツールです。ココフォリア株式会社、ココフォリア公式およびその運営とは関係ありません。
 
 ## 主な機能
 
-- Windowsローカルアプリ
-- Brave / Chromium系ブラウザ用拡張機能
-- ローカルbridge (`127.0.0.1:17431`)
-- キャラクター管理
-- キーワード / タグ検索
-- タグ / グループ管理
+### Character
+- キャラクター作成・編集
+- キーワード / 複数タグAND検索
+- タグ / 階層グループ管理
+- キャラクター複製
 - Quick Memo
 - ブラウザ内キャラクター編集
-- 画像管理
-- ココフォリアへのキャラクター送信
+- 画像登録 / 並び替え / メイン画像選択 / 削除
+- ゴミ箱 / 復元 / 完全削除
 - バックアップ / 復元
-- ゴミ箱 / 完全削除
+- CCFOLIAへのキャラクター送信
+- 複数キャラクターの一括送信 / 一括分類
+- CCFOLIA上の既存キャラクター取り込み
+
+### Images
+- ローカル画像ライブラリ
+- デスクトップアプリ / ブラウザパネルからの画像参照
+- 画像のドラッグ＆ドロップ追加
+- CCFOLIAの背景画像への適用
+- CCFOLIA上の既存画像データの取り込み
+- 多数の画像を扱うためのページ表示
+
+### BGM
+- ローカルBGMライブラリ
+- BGMの追加・検索・分類
+- 音量 / ループ等の設定
+- CCFOLIAルームのBGMをワンクリックで切り替え
+- ブラウザからのBGMアップロード・登録
+- CCFOLIA上の既存BGMデータの取り込み
+
+### Browser Extension / Local Bridge
+- Brave / Google Chrome / Microsoft Edge等のChromium系ブラウザに対応
+- CCFOLIA上にCCFOLIA Managerパネルを表示
+- Windowsアプリ本体と `127.0.0.1:17431` でローカル通信
+- Character / Images / BGMをブラウザ側から操作
 
 ## ダウンロード
 
-最新版は以下からダウンロードできます。
+最新版はGitHubのReleasesからダウンロードしてください。
 
-[Latest Release](https://github.com/L4zz0917/CCFOLIA-Character-Manager/releases/latest)
+[Latest Release](https://github.com/L4zz0917/CCFOLIA_Manager/releases/latest)
 
 配布ファイル名の例:
 
-`CCFOLIACharacterManager_v1.0.0_Windows_x64_by_L4zz.zip`
+`CCFOLIAManager_v2.0.0_Windows_x64_by_L4zz.zip`
 
-GitHubが自動生成する `Source code (zip)` / `Source code (tar.gz)` は、CCM本体の配布ZIPではありません。  
-必ずRelease Assetsにある `CCFOLIACharacterManager_...zip` を使用してください。
+GitHubが自動生成する `Source code (zip)` / `Source code (tar.gz)` は、実行用の配布ZIPではありません。  
+Release Assetsにある `CCFOLIAManager_...zip` を使用してください。
 
 ## インストール
 
 1. 配布ZIPを任意の書き込み可能なフォルダへ展開します。
-2. `CCFOLIACharacterManager.exe` を起動します。
-3. Braveで `brave://extensions/` を開きます。Chromeの場合は`chrome://extensions/`を開きます。edgeの場合は`edge://extensions/`を開きます。
+2. `CCFOLIAManager.exe` を起動します。
+3. 使用するブラウザの拡張機能管理画面を開きます。
+   - Brave: `brave://extensions/`
+   - Google Chrome: `chrome://extensions/`
+   - Microsoft Edge: `edge://extensions/`
 4. 「デベロッパーモード」を有効にします。
-5. 「パッケージ化されていない拡張機能を読み込む」を選択します。Chromeやedgeであれば「展開済みを読み込む」を選択します。
+5. 「パッケージ化されていない拡張機能を読み込む」または「展開済みを読み込む」を選択します。
 6. 配布物内の `browser_extension` フォルダを指定します。
-7. ココフォリアのルームを開くとCCMボタンが表示されます。
+7. CCFOLIAのルーム画面を再読み込みします。
 
-`Program Files` 直下よりも、Documentsや任意のAppsフォルダなど、通常ユーザーが書き込み可能な場所への展開を推奨します。
+`Program Files` 直下ではなく、Documentsや任意のAppsフォルダなど、通常ユーザーが書き込み可能な場所への展開を推奨します。
 
 ## データ保存
 
-ユーザーデータは、CCMを展開したフォルダ内の `app_data` に保存されます。
+ユーザーデータは、CCFOLIA Managerを展開したフォルダ内の `app_data` を中心に保存されます。
 
-- `app_data` — キャラクター・設定・画像など
-- `backups` — バックアップ
-- `exports` — 書き出しデータ
+更新やPC移行の前には、CCFOLIA Managerのフォルダ全体をバックアップすることを推奨します。
 
-配布ZIPには作者のキャラクターデータ等を含めていません。
+公開用配布ZIPには作者個人のキャラクター、画像、BGM、データベース等は含まれていません。
 
 ## セキュリティ
 
-ブラウザ拡張機能とCCM本体の通信には、`127.0.0.1:17431` のローカルbridgeを使用します。
+ブラウザ拡張機能とCCFOLIA Manager本体の通信には、`127.0.0.1:17431` のローカルbridgeを使用します。
 
-通常のWebページからbridge APIへアクセスしにくくするため、Host / Origin / 専用ヘッダー検証を行っています。
+bridgeではHost / Origin / 専用クライアントヘッダー等の検証を行っています。
 
-CCM用bridgeとして外部サーバーは利用しません。
+CCFOLIAとの連携で一時的に利用する認証情報は、ローカルManagerのSQLite等へ永続保存しない設計です。
 
-## 配布物の検証
+詳細は [SECURITY.md](SECURITY.md) を確認してください。
 
-配布ZIP内の `CHECKSUMS-SHA256.txt` に各ファイルのSHA-256を記載しています。
+## CCFOLIAとの互換性
 
-これはファイル破損や変更の確認用です。Windows Authenticodeによるコード署名ではありません。
+本ソフトウェアの一部機能は、CCFOLIAの公開されていない内部仕様に依存しています。
 
-Windows SmartScreenで「不明な発行元」と表示される場合があります。
+そのため、CCFOLIA側の仕様変更によって一部機能が一時的に動作しなくなる場合があります。
 
 ## 動作環境
 
 - Windows 10 / 11を想定
-- Brave / Chromium系ブラウザ
-- ココフォリアのWeb版ルーム
-
-環境やココフォリア側の仕様変更によって動作しなくなる場合があります。
+- Brave / Google Chrome / Microsoft Edge等のChromium系ブラウザ
+- CCFOLIAのWeb版ルーム
 
 ## 更新
 
-更新時はReleaseページから最新版を取得してください。
+新しいバージョンが公開された場合は、GitHubのReleasesから最新版を取得してください。
 
-既存の `app_data` / `backups` / `exports` を保持したままプログラム部分を更新する運用を推奨します。
+更新時は既存のユーザーデータを削除しないよう注意してください。  
+ブラウザ拡張機能も、拡張機能管理画面から再読み込みしてください。
+
+## 使い方
+詳しい操作方法は [USAGE.md](USAGE.md) を確認してください。
+
+## 変更履歴
+[CHANGELOG.md](CHANGELOG.md) を参照してください。
+
+## 利用条件
+詳細は [TERMS_OF_USE.md](TERMS_OF_USE.md) を確認してください。
 
 ## 不具合報告
 
@@ -94,28 +126,14 @@ GitHubの **Issues** から報告してください。
 
 可能であれば以下を添えてください。
 
-- CCMのバージョン
+- CCFOLIA Managerのバージョン
 - Windowsのバージョン
 - 使用ブラウザ
 - 発生した操作
 - エラーメッセージ
 - 再現手順
 
-キャラクターデータや個人情報をそのまま添付しないでください。
-
-## 使い方
-
-詳しい操作方法は [USAGE.md](USAGE.md) を確認してください。
-
-## 利用条件
-
-本ソフトウェアは無償で利用できますが、**個人による非商用利用を対象**としています。
-
-商用利用、無断再配布、無断の改変版公開等の詳細は [TERMS_OF_USE.md](TERMS_OF_USE.md) を確認してください。
-
-## 変更履歴
-
-[CHANGELOG.md](CHANGELOG.md) を参照してください。
+キャラクターデータ、個人情報、非公開セッションデータ、認証情報等をそのまま添付しないでください。
 
 ## 作者
 
@@ -123,6 +141,6 @@ GitHubの **Issues** から報告してください。
 
 ---
 
-CCFOLIA Character Manager は非公式の第三者ツールです。
+CCFOLIA Manager は非公式の第三者ツールです。
 
 開発には生成AIによるコーディング支援を一部利用しています。最終的な動作確認・配布判断は作者が行っています。
