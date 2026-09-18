@@ -566,6 +566,10 @@ def copy_public_docs(
 ) -> None:
     for filename in (
         "README.md",
+        "TERMS_OF_USE.md",
+        "SECURITY.md",
+        "CHANGELOG.md",
+        "USAGE.md",
         "LICENSE",
         "LICENSE.txt",
         "NOTICE",
@@ -951,3 +955,106 @@ def build_personal(
         )
 
     return staging
+
+# PUBLIC_DOCS_BUNDLE_V1
+# Ensure current public documentation is included in the distribution
+# before regenerating the manifest and ZIP.
+
+_build_public_without_public_docs_v1 = build_public
+
+
+def build_public(*args, **kwargs):
+    import inspect as _docs_inspect
+    import json as _docs_json
+    import shutil as _docs_shutil
+    from pathlib import Path as _DocsPath
+
+    result = _build_public_without_public_docs_v1(
+        *args,
+        **kwargs,
+    )
+
+    if isinstance(result, tuple):
+        staging_value = result[0]
+    else:
+        staging_value = result
+
+    staging = _DocsPath(staging_value)
+
+    public_docs = (
+        "README.md",
+        "USAGE.md",
+        "CHANGELOG.md",
+        "SECURITY.md",
+        "TERMS_OF_USE.md",
+    )
+
+    missing = [
+        name
+        for name in public_docs
+        if not (ROOT / name).is_file()
+    ]
+
+    if missing:
+        raise RuntimeError(
+            "公開用ドキュメントが不足しています: "
+            + ", ".join(missing)
+        )
+
+    for name in public_docs:
+        _docs_shutil.copy2(
+            ROOT / name,
+            staging / name,
+        )
+
+    manifest_path = staging / "BUILD_MANIFEST.json"
+
+    previous_manifest = {}
+    if manifest_path.is_file():
+        try:
+            previous_manifest = _docs_json.loads(
+                manifest_path.read_text(
+                    encoding="utf-8-sig"
+                )
+            )
+        except Exception:
+            previous_manifest = {}
+
+        manifest_path.unlink()
+
+    manifest_signature = _docs_inspect.signature(
+        write_manifest
+    )
+
+    manifest_kwargs = {}
+
+    if "profile" in manifest_signature.parameters:
+        manifest_kwargs["profile"] = "public"
+
+    if "version" in manifest_signature.parameters:
+        version = kwargs.get("version")
+
+        if version is None:
+            version = previous_manifest.get(
+                "version"
+            )
+
+        if version is not None:
+            manifest_kwargs["version"] = version
+
+    write_manifest(
+        staging,
+        **manifest_kwargs,
+    )
+
+    zip_path = staging.with_suffix(".zip")
+
+    if zip_path.exists():
+        zip_path.unlink()
+
+    make_zip(
+        staging,
+        zip_path,
+    )
+
+    return result

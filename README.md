@@ -1,6 +1,7 @@
 # CCFOLIA Manager
 
-**Version 2.0.0**  
+**Version 2.0.1**
+
 **Author: L4zz**
 
 CCFOLIA Manager は、ココフォリアで使用するキャラクター・画像・BGMをローカルでまとめて管理し、Windowsアプリとブラウザ拡張機能からCCFOLIAへ連携するための非公式ツールです。
@@ -22,7 +23,7 @@ CCFOLIA Manager は、ココフォリアで使用するキャラクター・画�
 - バックアップ / 復元
 - CCFOLIAへのキャラクター送信
 - 複数キャラクターの一括送信 / 一括分類
-- CCFOLIA上の既存キャラクター取り込み
+- 現在のCCFOLIAルームで自分が所有しているキャラクターの取り込み
 
 ### Images
 - ローカル画像ライブラリ
@@ -54,7 +55,7 @@ CCFOLIA Manager は、ココフォリアで使用するキャラクター・画�
 
 配布ファイル名の例:
 
-`CCFOLIAManager_v2.0.0_Windows_x64_by_L4zz.zip`
+`CCFOLIAManager_v2.0.1_Windows_x64_by_L4zz.zip`
 
 GitHubが自動生成する `Source code (zip)` / `Source code (tar.gz)` は、実行用の配布ZIPではありません。  
 Release Assetsにある `CCFOLIAManager_...zip` を使用してください。
@@ -90,6 +91,8 @@ bridgeではHost / Origin / 専用クライアントヘッダー等の検証を�
 
 CCFOLIAとの連携で一時的に利用する認証情報は、ローカルManagerのSQLite等へ永続保存しない設計です。
 
+v2.0.1では、CharacterのCCFOLIA取り込み処理を現在ログイン中のユーザーが `owner` であるキャラクターだけに限定しています。Firestoreへの問い合わせ段階で所有者条件を適用し、ローカル保存前にも再確認します。
+
 詳細は [SECURITY.md](SECURITY.md) を確認してください。
 
 ## CCFOLIAとの互換性
@@ -108,8 +111,11 @@ CCFOLIAとの連携で一時的に利用する認証情報は、ローカルMana
 
 新しいバージョンが公開された場合は、GitHubのReleasesから最新版を取得してください。
 
-更新時は既存のユーザーデータを削除しないよう注意してください。  
-ブラウザ拡張機能も、拡張機能管理画面から再読み込みしてください。
+v2.0.0を利用している場合は、v2.0.1以降の通常版ZIPへ更新してください。
+
+更新前には既存のCCFOLIA Managerフォルダをバックアップし、ユーザーデータが保存されている `app_data` を誤って削除しないよう注意してください。
+
+更新後はブラウザの拡張機能管理画面からCCFOLIA Manager拡張を再読み込みし、CCFOLIAのルーム画面も再読み込みしてください。
 
 ## 使い方
 詳しい操作方法は [USAGE.md](USAGE.md) を確認してください。

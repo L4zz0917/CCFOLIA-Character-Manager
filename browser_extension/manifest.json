@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "CCFOLIA Manager",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "CCFOLIA Manager のCharacter / Images / BGMをブラウザから操作する統合拡張機能です。",
   "host_permissions": [
     "http://127.0.0.1:17431/*"

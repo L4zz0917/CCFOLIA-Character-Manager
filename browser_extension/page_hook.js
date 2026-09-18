@@ -901,49 +901,124 @@
     return String(decoded?.name || "").trim();
   }
 
+  // CHARACTER_SELF_ONLY_IMPORT_V1
   async function readCurrentRoomCharacters() {
-    const token = await findFirebaseAccessToken();
-    const roomId = currentRoomId();
+    const token =
+      await findFirebaseAccessToken();
+
+    const roomId =
+      currentRoomId();
+
     const roomName =
       await readCurrentRoomName(
         roomId,
         token,
       );
+
+    const store =
+      findCCFOLIAReduxStore();
+
+    if (!store) {
+      throw new Error(
+        "CCFOLIAの現在ユーザー情報を取得できませんでした。"
+        + " ページを再読み込みしてから再試行してください。",
+      );
+    }
+
+    let state;
+
+    try {
+      state = store.getState();
+    } catch (error) {
+      throw new Error(
+        "CCFOLIAの現在ユーザー情報を読み取れませんでした。",
+      );
+    }
+
+    const selfMemberId =
+      String(
+        state?.app?.user?.uid
+        || "",
+      );
+
+    if (!selfMemberId) {
+      throw new Error(
+        "現在ログイン中のCCFOLIAユーザーIDを取得できませんでした。",
+      );
+    }
+
+    const roomMember =
+      state?.entities
+        ?.roomMembers
+        ?.entities
+        ?.[selfMemberId];
+
+    if (!roomMember) {
+      throw new Error(
+        "現在のルーム内メンバー情報と"
+        + "ログイン中ユーザーを照合できませんでした。",
+      );
+    }
+
     const url =
       `https://firestore.googleapis.com/v1/projects/${PROJECT_ID}`
       + `/databases/(default)/documents/rooms/${
         encodeURIComponent(roomId)
       }:runQuery`;
 
-    const response = await fetch(
-      url,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          structuredQuery: {
-            from: [
-              {
-                collectionId: "characters",
-              },
-            ],
-            limit: 1000,
+    const response =
+      await fetch(
+        url,
+        {
+          method: "POST",
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+            "Content-Type":
+              "application/json",
           },
-        }),
-        mode: "cors",
-        credentials: "omit",
-      },
-    );
+          body: JSON.stringify({
+            structuredQuery: {
+              from: [
+                {
+                  collectionId:
+                    "characters",
+                },
+              ],
+              where: {
+                fieldFilter: {
+                  field: {
+                    fieldPath:
+                      "owner",
+                  },
+                  op:
+                    "EQUAL",
+                  value: {
+                    stringValue:
+                      selfMemberId,
+                  },
+                },
+              },
+              limit:
+                1000,
+            },
+          }),
+          mode:
+            "cors",
+          credentials:
+            "omit",
+        },
+      );
 
-    const text = await response.text();
+    const text =
+      await response.text();
+
     let body = [];
 
     if (text) {
       try {
-        body = JSON.parse(text);
+        body =
+          JSON.parse(text);
       } catch (error) {
         throw new Error(
           "CCFOLIAキャラクター一覧の応答を解析できませんでした。",
@@ -955,6 +1030,7 @@
       const detail =
         body?.error?.message
         || `HTTP ${response.status}`;
+
       throw new Error(
         `CCFOLIAキャラクター取得失敗: ${detail}`,
       );
@@ -962,26 +1038,66 @@
 
     const characters = [];
 
-    for (const item of Array.isArray(body) ? body : []) {
-      const document = item?.document;
-      if (!document) continue;
+    for (
+      const item
+      of Array.isArray(body) ? body : []
+    ) {
+      const document =
+        item?.document;
 
-      const id = firestoreDocumentId(document.name);
-      if (!id) continue;
+      if (!document) {
+        continue;
+      }
+
+      const fields =
+        document.fields || {};
+
+      // Firestore側で owner == selfMemberId に
+      // 絞っているが、保存前にももう一度確認する。
+      const ownerValue =
+        fields?.owner
+        && "stringValue" in fields.owner
+          ? String(
+              fields.owner.stringValue
+              || "",
+            )
+          : "";
+
+      if (
+        !ownerValue
+        || ownerValue !== selfMemberId
+      ) {
+        continue;
+      }
+
+      const id =
+        firestoreDocumentId(
+          document.name,
+        );
+
+      if (!id) {
+        continue;
+      }
 
       characters.push({
         id,
-        fields: decodeFirestoreCharacterFields(
-          document.fields || {},
-        ),
+        fields:
+          decodeFirestoreCharacterFields(
+            fields,
+          ),
       });
     }
 
     return {
-      room_id: roomId,
-      room_name: roomName,
+      room_id:
+        roomId,
+      room_name:
+        roomName,
       characters,
-      truncated: characters.length >= 1000,
+      truncated:
+        characters.length >= 1000,
+      self_only:
+        true,
     };
   }
 
@@ -1633,6 +1749,105 @@
       volume,
       loop,
     };
+  }
+
+
+
+
+
+
+
+  // CHARACTER_SELF_ID_HELPER_V1
+  function findCCFOLIAReduxStore() {
+    const root = document.getElementById("root");
+
+    if (!root) {
+      return null;
+    }
+
+    const rootKeys =
+      Object.keys(root);
+
+    const fiberKey =
+      rootKeys.find(
+        (key) =>
+          key.startsWith("__reactFiber$")
+          || key.startsWith("__reactContainer$"),
+      );
+
+    if (!fiberKey) {
+      return null;
+    }
+
+    const queue = [
+      root[fiberKey],
+    ];
+
+    const seen =
+      new Set();
+
+    let checked = 0;
+
+    while (
+      queue.length
+      && checked < 6000
+    ) {
+      const fiber =
+        queue.shift();
+
+      if (
+        !fiber
+        || typeof fiber !== "object"
+        || seen.has(fiber)
+      ) {
+        continue;
+      }
+
+      seen.add(fiber);
+      checked += 1;
+
+      const candidates = [
+        fiber.memoizedProps?.store,
+        fiber.pendingProps?.store,
+        fiber.memoizedProps?.value?.store,
+        fiber.pendingProps?.value?.store,
+        fiber.stateNode?.store,
+      ];
+
+      for (
+        const store
+        of candidates
+      ) {
+        if (
+          store
+          && typeof store.getState === "function"
+          && typeof store.subscribe === "function"
+          && typeof store.dispatch === "function"
+        ) {
+          return store;
+        }
+      }
+
+      if (fiber.child) {
+        queue.push(
+          fiber.child
+        );
+      }
+
+      if (fiber.sibling) {
+        queue.push(
+          fiber.sibling
+        );
+      }
+
+      if (fiber.return) {
+        queue.push(
+          fiber.return
+        );
+      }
+    }
+
+    return null;
   }
 
 

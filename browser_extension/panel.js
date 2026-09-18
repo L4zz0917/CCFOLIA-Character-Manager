@@ -2242,7 +2242,8 @@
           <span id="selectedCount">0件選択</span>
           <div class="footerActions">
             <!-- CHARACTER_SALVAGE_IMPORT_PANEL_V1 -->
-            <button id="characterSalvageImport" class="smallAction" type="button" title="現在のCCFOLIAルームにあるキャラクターをManagerへ取り込む">CCFOLIAから取り込む</button>
+            <!-- CHARACTER_SELF_ONLY_IMPORT_V1 -->
+            <button id="characterSalvageImport" class="smallAction" type="button" title="現在のCCFOLIAルームで自分が所有しているキャラクターだけをManagerへ取り込む">自分のキャラを取り込む</button>
             <button id="createCharacter" class="smallAction" type="button">＋ 作成</button>
             <button id="sendSelected" class="actionButton primary" type="button" disabled>
               選択を送る
@@ -5088,16 +5089,20 @@
       });
     }
 
+
     async function runCharacterSalvageImport() {
       if (!characterSalvageImport) {
         return;
       }
 
       const accepted = window.confirm(
-        "現在のCCFOLIAルームにあるキャラクターを"
+        "現在のCCFOLIAルームで、"
+        + "あなた自身が所有しているキャラクターだけを"
         + "CCFOLIA Managerへ取り込みます。\n\n"
+        + "他の参加者がownerのキャラクターは"
+        + "取得対象にしません。\n"
         + "すでに取り込み済みのキャラクターは"
-        + "CCFOLIA上のIDで判定してスキップします。\n"
+        + "CCFOLIA上のIDで判定してスキップします。\n\n"
         + "続行しますか？",
       );
 
@@ -5129,8 +5134,8 @@
         if (!roomCharacters.length) {
           status.textContent = "部屋キャラ 0件";
           window.alert(
-            "現在のルームに取り込める"
-            + "キャラクターが見つかりませんでした。",
+            "現在のルームに、あなた自身が所有する"
+            + "取り込み可能なキャラクターが見つかりませんでした。",
           );
           return;
         }
