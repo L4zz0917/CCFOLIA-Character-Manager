@@ -1,0 +1,48 @@
+{
+  "manifest_version": 3,
+  "name": "CCFOLIA Manager",
+  "version": "0.7.0",
+  "description": "CCFOLIA Manager のCharacter / Images / BGMをブラウザから操作する統合拡張機能です。",
+  "host_permissions": [
+    "http://127.0.0.1:17431/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://ccfolia.com/rooms/*"
+      ],
+      "js": [
+        "page_hook.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN"
+    },
+    {
+      "matches": [
+        "https://ccfolia.com/rooms/*"
+      ],
+      "js": [
+        "content.js",
+        "panel.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": [
+    "storage"
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "drop_zone.html",
+        "drop_zone.js"
+      ],
+      "matches": [
+        "https://ccfolia.com/*"
+      ]
+    }
+  ]
+}
