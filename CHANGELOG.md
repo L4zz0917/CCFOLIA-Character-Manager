@@ -1,10 +1,56 @@
 # Changelog
 
-CCFOLIA Character Manager の主な変更履歴です。
+CCFOLIA Manager の主な変更履歴です。
 
 形式は [Keep a Changelog](https://keepachangelog.com/ja/1.1.0/) を参考にしています。
 
-## v1.0.1 - 2026-09-16
+## [2.0.0] - 2026-09-18
+
+### Added
+
+- CCFOLIA ManagerとしてCharacter / Images / BGMを統合管理する構成を追加
+- デスクトップアプリにImages管理画面を追加
+- デスクトップアプリにBGM管理画面を追加
+- ブラウザパネルにCharacter / Images / BGMの切り替えを追加
+- ローカル画像ライブラリを追加
+- ブラウザからCCFOLIA背景へ画像を適用する機能を追加
+- CCFOLIA上の既存画像データをCCFOLIA Managerへ取り込む機能を追加
+- 大量の画像を扱うためのページ表示を追加
+- ローカルBGMライブラリを追加
+- BGMの音量 / ループ / 種別 / タグ / グループ管理を追加
+- ブラウザからCCFOLIAへBGMをアップロード・登録する機能を追加
+- 現在のCCFOLIAルームのBGMをブラウザパネルから切り替える機能を追加
+- CCFOLIA上の既存BGM情報をCCFOLIA Managerへ取り込む機能を追加
+- CCFOLIAルーム上の既存キャラクターをCCFOLIA Managerへ取り込む機能を追加
+- タスクトレイ運用を追加
+- 個人用スナップショットと公開用クリーンビルドを分けるビルド構成を追加
+
+### Changed
+
+- 製品名を `CCFOLIA Character Manager` から `CCFOLIA Manager` へ変更
+- Character単体中心の構成から、Character / Images / BGMを扱う統合Managerへ再構成
+- ブラウザ拡張機能のパネルを統合Manager向けに拡張
+- 公開配布物の名称を `CCFOLIAManager_v2.0.0_Windows_x64_by_L4zz.zip` 形式へ変更
+- 大規模な画像ライブラリでもブラウザパネルの初期表示が重くなりにくいよう読み込み方式を改善
+
+### Character
+
+- 1.xで提供していたキャラクター作成・編集・検索・タグ・グループ・Quick Memo・ブラウザ編集・送信・一括操作・ゴミ箱・バックアップ等の基本機能を継続
+- キャラクター管理自体の基本操作は1.xから大きく変更していません
+
+### Security
+
+- CCFOLIA連携時に一時的に利用する認証情報をローカルSQLite等へ永続保存しない構成を採用
+- ローカルbridgeのHost / Origin / 専用クライアントヘッダー等の検証を継続
+
+### Notes
+
+- CCFOLIAの一部公開されていない内部仕様に依存する機能があります
+- CCFOLIA側の仕様変更により、一部連携機能が一時的に動作しなくなる場合があります
+- Windows Authenticode署名は未実施
+- ブラウザ拡張機能はデベロッパーモードで読み込む方式です
+
+## [1.0.1] - 2026-09-16
 
 ### Added
 
